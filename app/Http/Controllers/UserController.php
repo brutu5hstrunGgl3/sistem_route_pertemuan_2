@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 
 class UserController extends Controller
@@ -18,7 +19,9 @@ class UserController extends Controller
         ->when($request->input('name'), function($query, $name){
             return $query->where('name', 'like', '%'.$name.'%');
         })
-           ->get(); 
+        ->orderBy('name', 'desc')
+        ->paginate(10);
+       
 
          
           return view('pages.user.index' , compact('users'));
@@ -57,7 +60,7 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+           return view('pages.user.edit');
     }
 
     /**
@@ -71,8 +74,13 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->route('user.index')->with('success', 'Data berhasil di hapus');
     }
 }
+
+
+
+

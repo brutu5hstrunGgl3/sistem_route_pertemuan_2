@@ -17,7 +17,7 @@
                     <div class="breadcrumb-item">Table</div>
                 </div>
             </div>
-
+            @include('layouts.alert')
            
                 <div class="row">
                     <div class="col-12">
@@ -25,11 +25,11 @@
                             <div class="card-header">
                                 <h4>Daftar User</h4>
                                 <div class="card-header-action">
-                                    <form>
+                                    <form method="GET" action="{{ route('user.index') }}">
                                         <div class="input-group">
                                             <input type="text"
                                                 class="form-control"
-                                                placeholder="Search">
+                                                placeholder="Search" name="name">
                                             <div class="input-group-btn">
                                                 <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                                             </div>
@@ -59,12 +59,30 @@
                                                     <td>{{ $user->jkel }}</td>
                                                     <td>{{ $user->phone }}</td>
                                                     <td>{{ $user->email }}</td>
+                                                    <td>  <div class="d-flex justify-content-center">
+                                                        <a href="{{ route('user.edit', $user->id) }}"
+                                                            class="btn btn-sm btn-info btn-icon">
+                                                            <i class="fas fa-edit"></i>
+                                                            Edit
+                                                        </a>
+                                                        <form action="{{ route('user.destroy', $user->id) }}" method="POST"
+                                                            class="ml-2">
+                                                            <input type="hidden" name="_method" value="DELETE" />
+                                                            <input type="hidden" name="_token"
+                                                                value="{{ csrf_token() }}" />
+                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
+                                                                <i class="fas fa-times"></i> Delete
+                                                            </button>
+                                                        </form>
+                                                    </td>
                                                 </tr>
                                                 @endforeach
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                                <div class="float-right">
+                                {{ $users->withQueryString()->links('pagination::bootstrap-5') }}
+                                </div>
                         </div>
                     </div>
                 </div>
